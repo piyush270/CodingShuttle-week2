@@ -1,29 +1,35 @@
 package com.coding.shuttle.springbootPracticeProject.controllers;
 
-import com.coding.shuttle.springbootPracticeProject.dto.EmployeeDto;
+import com.coding.shuttle.springbootPracticeProject.entities.EmployeeEntity;
+import com.coding.shuttle.springbootPracticeProject.repositories.EmployeeRepository;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "/employees")
 public class EmployeeController {
 
+    private final EmployeeRepository employeeRepository;
+
+    public EmployeeController(EmployeeRepository employeeRepository){
+        this.employeeRepository = employeeRepository;
+    }
+
     @GetMapping(path = "/{employeeId}")
-    public EmployeeDto getEmployeeById(@PathVariable(name = "employeeId") Long id){
-        return new EmployeeDto(1l, "Piyush", "piyush@gmail.com", 22, LocalDate.of(2022,03,27), true);
+    public EmployeeEntity getEmployeeById(@PathVariable(name = "employeeId") Long id){
+        return employeeRepository.findById(id).orElse(null);
     }
 
     @GetMapping
-    public String getAllEmployees(@RequestParam(required = false , name = "EmpAge") Integer age,
-                                  @RequestParam(required = false) String sortBy){
-        return "employee age is " + age + " and sort by " + sortBy;
+    public List<EmployeeEntity> getAllEmployees(@RequestParam(required = false , name = "EmpAge") Integer age,
+                                                @RequestParam(required = false) String sortBy){
+        return employeeRepository.findAll();
     }
 
     @PostMapping
-    public EmployeeDto createEmployee(@RequestBody EmployeeDto employee){
-        employee.setId((long)Math.random());
-        return employee;
+    public EmployeeEntity createEmployee(@RequestBody EmployeeEntity employee){
+        return employeeRepository.save(employee);
     }
 
     @PutMapping
