@@ -1,7 +1,7 @@
 package com.coding.shuttle.springbootPracticeProject.controllers;
 
-import com.coding.shuttle.springbootPracticeProject.entities.EmployeeEntity;
-import com.coding.shuttle.springbootPracticeProject.repositories.EmployeeRepository;
+import com.coding.shuttle.springbootPracticeProject.dto.EmployeeDto;
+import com.coding.shuttle.springbootPracticeProject.service.EmployeeService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,26 +10,26 @@ import java.util.List;
 @RequestMapping(path = "/employees")
 public class EmployeeController {
 
-    private final EmployeeRepository employeeRepository;
+    private final EmployeeService employeeService;
 
-    public EmployeeController(EmployeeRepository employeeRepository){
-        this.employeeRepository = employeeRepository;
+    public EmployeeController(EmployeeService employeeService) {
+        this.employeeService = employeeService;
     }
 
     @GetMapping(path = "/{employeeId}")
-    public EmployeeEntity getEmployeeById(@PathVariable(name = "employeeId") Long id){
-        return employeeRepository.findById(id).orElse(null);
+    public EmployeeDto getEmployeeById(@PathVariable(name = "employeeId") Long id){
+        return employeeService.findById(id);
     }
 
     @GetMapping
-    public List<EmployeeEntity> getAllEmployees(@RequestParam(required = false , name = "EmpAge") Integer age,
+    public List<EmployeeDto> getAllEmployees(@RequestParam(required = false , name = "EmpAge") Integer age,
                                                 @RequestParam(required = false) String sortBy){
-        return employeeRepository.findAll();
+        return employeeService.findAll();
     }
 
     @PostMapping
-    public EmployeeEntity createEmployee(@RequestBody EmployeeEntity employee){
-        return employeeRepository.save(employee);
+    public EmployeeDto createEmployee(@RequestBody EmployeeDto employee){
+        return employeeService.save(employee);
     }
 
     @PutMapping
