@@ -13,7 +13,6 @@ public class EmployeeRoleValidator implements ConstraintValidator<EmployeeRoleVa
         List<String> roles = new ArrayList<>();
         roles.add("USER");
         roles.add("ADMIN");
-
         return roles.contains(inputRole);
     }
 }
