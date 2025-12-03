@@ -29,6 +29,8 @@ public class GlobalExceptionHandler {
                 .message(exception.getMessage())
                 .build();
 
+        exception.printStackTrace();
+
         return buildResponseEntity(apiError);
     }
 
